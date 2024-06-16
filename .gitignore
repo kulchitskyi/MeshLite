@@ -1,0 +1,11 @@
+PetProject/dependencies/
+PetProject/imgui/
+PetProject/x64/
+PetProject/stb_image.cpp
+PetProject/stb_image.h
+PetProject/glad.c
+PetProject/imgui.ini
+PetProject/PetProject.vcxproj
+PetProject/PetProject.vcxproj.filters
+PetProject/PetProject.vcxproj.user
+PetProject/assimp-vc143-mtd.dll
