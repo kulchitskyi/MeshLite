@@ -39,7 +39,6 @@ namespace VDPL //vertex data processing logik
 
     struct Edge
     {
-        Edge(Vertex _v1, Vertex _v2);
         Vertex v1;
         Vertex v2;
     };

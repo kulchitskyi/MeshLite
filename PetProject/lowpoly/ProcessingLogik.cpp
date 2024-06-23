@@ -6,8 +6,6 @@ namespace VDPL //vertex data processing logik
     uint32_t OBJReader::vertexCounte = 1;
     uint32_t OBJReader::normalCounte = 1;
 
-    Edge::Edge(Vertex _v1, Vertex _v2) : v1(_v1), v2(_v2) {};
-
     bool operator ==(const Vertex& ver1, const Vertex& ver2)
     {
         return (ver1.x == ver2.x) && (ver1.y == ver2.y) && (ver1.z == ver2.z);
