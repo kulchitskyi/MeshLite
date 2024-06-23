@@ -76,27 +76,27 @@ namespace VDPL //vertex data processing logik
         ResetCounters();
         std::ifstream myfile(path);
         std::string line;
-        if (myfile.is_open())
+        if (!myfile.is_open())
         {
-            while (std::getline(myfile, line))
-            {
-                if (line.compare(0, 2, "v ") == 0)
-                {
-                    verticies.push_back(fromStrToVer(line));
-                }
-                else if (line.compare(0, 2, "vn") == 0)
-                {
-                    normals.push_back(fromStrToVec3(line));
-                }
-                else if (line.compare(0, 2, "f ") == 0)
-                {
-                    faces.push_back(fromStrToFace(line, verticies));
-                }
-            }
-            myfile.close();
-        }
-        else
             std::cout << "Unable to open file";
+            return;
+        }
+        while (std::getline(myfile, line))
+        {
+            if (line.compare(0, 2, "v ") == 0)
+            {
+                verticies.push_back(fromStrToVer(line));
+            }
+            else if (line.compare(0, 2, "vn") == 0)
+            {
+                normals.push_back(fromStrToVec3(line));
+            }
+            else if (line.compare(0, 2, "f ") == 0)
+            {
+                faces.push_back(fromStrToFace(line, verticies));
+            }
+        }
+        myfile.close();
     }
 
 
