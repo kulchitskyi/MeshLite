@@ -30,7 +30,7 @@ namespace VDPL //vertex data processing logik
         OBJReader::normalCounte = 1;
     }
 
-    Vertex OBJReader::fromStrToVer(std::string input)
+    Vertex OBJReader::readVer(std::string input)
     {
         char temp;
         std::stringstream stringstream(input);
@@ -41,7 +41,7 @@ namespace VDPL //vertex data processing logik
         return vert;
     }
 
-    Vec3 OBJReader::fromStrToVec3(std::string input)
+    Vec3 OBJReader::readVec3(std::string input)
     {
         char temp;
         std::stringstream stringstream(input);
@@ -52,7 +52,7 @@ namespace VDPL //vertex data processing logik
         return normal;
     }
 
-    Face OBJReader::fromStrToFace(std::string input, std::vector<Vertex>& verticies)
+    Face OBJReader::readFace(std::string input, std::vector<Vertex>& verticies)
     {
         std::stringstream stringstream(input);
         char temp;
@@ -85,15 +85,15 @@ namespace VDPL //vertex data processing logik
         {
             if (line.compare(0, 2, "v ") == 0)
             {
-                verticies.push_back(fromStrToVer(line));
+                verticies.push_back(readVer(line));
             }
             else if (line.compare(0, 2, "vn") == 0)
             {
-                normals.push_back(fromStrToVec3(line));
+                normals.push_back(readVec3(line));
             }
             else if (line.compare(0, 2, "f ") == 0)
             {
-                faces.push_back(fromStrToFace(line, verticies));
+                faces.push_back(readFace(line, verticies));
             }
         }
         myfile.close();

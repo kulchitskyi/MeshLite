@@ -70,10 +70,9 @@ namespace VDPL //vertex data processing logik
 
         void ResetCounters();
 
-        Vertex fromStrToVer(std::string input);
-
-        Vec3 fromStrToVec3(std::string input);
-        Face fromStrToFace(std::string input, std::vector<Vertex>& verticies);
+        Vertex readVer(std::string input);
+        Vec3 readVec3(std::string input);
+        Face readFace(std::string input, std::vector<Vertex>& verticies);
         void readFromObj(std::string path, std::vector<Vertex>& verticies, std::vector<Face>& faces, std::vector<Vec3>& normals);
     };
 
