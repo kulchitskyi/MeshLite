@@ -1,6 +1,9 @@
+.vs/
+x64/
 PetProject/dependencies/
 PetProject/imgui/
 PetProject/x64/
+PetProject.sln
 PetProject/stb_image.cpp
 PetProject/stb_image.h
 PetProject/glad.c
