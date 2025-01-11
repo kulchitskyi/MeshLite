@@ -71,7 +71,7 @@ namespace VDPL //vertex data processing logik
         return face;
     }
 
-    void OBJReader::readFromObj(std::string path, std::vector<Vertex>& verticies, std::vector<Face>& faces, std::vector<Vec3>& normals)
+    void OBJReader::readFromObj(const std::filesystem::path& path, std::vector<Vertex>& verticies, std::vector<Face>& faces, std::vector<Vec3>& normals)
     {
         ResetCounters();
         std::ifstream myfile(path);
@@ -100,7 +100,7 @@ namespace VDPL //vertex data processing logik
     }
 
 
-    Mesh::Mesh(std::string path)
+    Mesh::Mesh(const std::filesystem::path& path)
     {
         OBJReader reader;
         reader.readFromObj(path, allVerticies, allFaces, allNormals);
@@ -228,17 +228,17 @@ namespace VDPL //vertex data processing logik
         return edgesToRemove;
     }
 
-    std::string FileWriter::fastWriteToFile(std::string path, Mesh& mesh, std::vector<int>& faceToDel)
+    std::filesystem::path FileWriter::fastWriteToFile(const std::filesystem::path& path, Mesh& mesh, std::vector<int>& faceToDel)
     {
         std::ifstream originalFile(path);
         if (!originalFile.is_open())
         {
-            std::cerr << "Failed to open the original file: " << path << "\n";
+            std::cerr << "Failed to open the original file: " << path.generic_string() << "\n";
             return std::string();
         }
 
         std::ofstream copiedFile;
-        std::string newPath = path.substr(0, path.find_last_of("\\") + 1) + "lowpoly_" + path.substr(path.find_last_of("\\") + 1);
+        std::filesystem::path newPath = path.parent_path().generic_string() + "\\lowpoly_" + path.filename().generic_string();
         copiedFile.open(newPath);
         std::string line;
         std::string lable = "#Model was created with the help of lowpoly generator.\n";

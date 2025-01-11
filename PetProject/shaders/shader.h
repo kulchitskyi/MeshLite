@@ -10,6 +10,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <array>
 
 class Shader
 {
@@ -17,7 +18,7 @@ public:
 	unsigned int ID;
 
 	Shader(const char* vertexPath, const char* fragmentPath);
-
+    Shader() = default;
 	void use();
 
 	void setBool(const std::string& name, bool value) const;
@@ -27,6 +28,8 @@ public:
     void setVec2(const std::string& name, float x, float y) const;
     void setVec3(const std::string& name, const glm::vec3& value) const;
     void setVec3(const std::string& name, float x, float y, float z) const;
+    void setVec3(const std::string& name, std::array<float, 3> xyz) const;
+    void setVec4(const std::string& name, std::array<float, 4> value) const;
     void setVec4(const std::string& name, const glm::vec4& value) const;
     void setVec4(const std::string& name, float x, float y, float z, float w) const;
     void setMat2(const std::string& name, const glm::mat2& mat) const;

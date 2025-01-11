@@ -1,6 +1,6 @@
 #include "model.h"
 
-Model::Model(std::string const& path, bool gamma) : gammaCorrection(gamma)
+Model::Model(const std::filesystem::path& path, bool gamma) : gammaCorrection(gamma)
 {
     loadModel(path);
 }
@@ -11,18 +11,18 @@ void Model::Draw(Shader& shader)
         meshes[i].Draw(shader);
 }
 
-void Model::loadModel(std::string const& path)
+void Model::loadModel(const std::filesystem::path& path)
 {
     textures_loaded.clear();
     meshes.clear();
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+    const aiScene* scene = importer.ReadFile(path.generic_string(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
         std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << "\n";
         return;
     }
-    directory = path.substr(0, path.find_last_of('/'));
+    modelPath = path;
 
     processNode(scene->mRootNode, scene);
 }
@@ -135,7 +135,7 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType 
         if (!skip)
         {
             Texture texture;
-            texture.id = TextureFromFile(str.C_Str(), this->directory);
+            texture.id = TextureFromFile(str.C_Str(), modelPath.parent_path());
             texture.type = typeName;
             texture.path = str.C_Str();
             textures.push_back(texture);
@@ -146,10 +146,10 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType 
 }
 
 
-unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma)
+unsigned int TextureFromFile(const char* path, const std::filesystem::path& directory, bool gamma)
 {
     std::string filename = std::string(path);
-    filename = directory + '/' + filename;
+    filename = directory.generic_string() + '/' + filename;
 
     unsigned int textureID;
     glGenTextures(1, &textureID);

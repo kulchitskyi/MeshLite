@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <filesystem>
 #include <string>
 #include <sstream>
 #include <vector>
@@ -73,7 +74,7 @@ namespace VDPL //vertex data processing logik
         Vertex readVer(std::string input);
         Vec3 readVec3(std::string input);
         Face readFace(std::string input, std::vector<Vertex>& verticies);
-        void readFromObj(std::string path, std::vector<Vertex>& verticies, std::vector<Face>& faces, std::vector<Vec3>& normals);
+        void readFromObj(const std::filesystem::path& path, std::vector<Vertex>& verticies, std::vector<Face>& faces, std::vector<Vec3>& normals);
     };
 
     class Mesh
@@ -83,7 +84,7 @@ namespace VDPL //vertex data processing logik
         std::vector<Face> allFaces;
         std::vector<Vec3> allNormals;
 
-        Mesh(std::string path);
+        Mesh(const std::filesystem::path& path);
     };
 
 
@@ -116,6 +117,6 @@ namespace VDPL //vertex data processing logik
     {
     public:
 
-        std::string fastWriteToFile(std::string path, Mesh& mesh, std::vector<int>& faceToDel);
+        std::filesystem::path fastWriteToFile(const std::filesystem::path& path, Mesh& mesh, std::vector<int>& faceToDel);
     };
 }
