@@ -38,7 +38,7 @@ public:
 
     Mesh(std::vector<Vertex> _vertices, std::vector<unsigned int> _indices, std::vector<Texture> _textures);
 
-    void Draw(Shader& shader);
+    void draw(Shader& shader);
 
 private:
     unsigned int VBO, EBO;

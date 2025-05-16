@@ -1,4 +1,7 @@
 #pragma once
+#include "shaders/shader.h"
+#include "model/model.h"
+#include "scene/sceneCondition.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -7,9 +10,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "shaders/shader.h"
-#include "model/model.h"
-#include "scene/sceneCondition.h"
 
 class Renderer
 {
@@ -19,21 +19,25 @@ private:
 	uint16_t screenHeight = 640;
 
 	std::shared_ptr<Scene> scene;
-	std::shared_ptr<Model> model;
-	std::shared_ptr<Shader> modelShader;
+	Shader modelShader;
+	Shader pickingShader;
+	static GLuint pickingFBO, pickingTexture, depthBuffer;
 
 public:
 	Renderer(std::shared_ptr<Scene> _scene);
-	std::shared_ptr<GLFWwindow> GetGLFWwindow();
-	GLFWwindow* GetGLFWwindowRawPtr();
-	void GLFWititialize(uint8_t openGLmajor = 4, uint8_t openGLminor = 4);
-	void CreateGLFWwindow(uint16_t _screenWidth = 860, uint16_t _screenHeight = 640);
-	void EnableFaceCulling();
-	void SetShaders(std::shared_ptr<Shader> _modelShader);
-	void SetModel(std::shared_ptr<Model> _model);
-	void UpdateModelShader();
-	void UpdateModelProjection();
-	void ClearBuffers();
-	void RenderNewFrame();
-	void Terminate();
+	std::shared_ptr<GLFWwindow> getGLFWwindow();
+	GLFWwindow* getGLFWwindowRawPtr();
+	void ititializeGLFW(uint8_t openGLmajor = 4, uint8_t openGLminor = 4);
+	void createGLFWwindow();
+	void enableFaceCulling();
+	void setShaders(Shader &_modelShader);
+	void addModel(std::shared_ptr<AssimpLoader::Model> _model);
+	void updateModelShader(std::shared_ptr<AssimpLoader::Model> model);
+	void updateModelProjection(std::shared_ptr<AssimpLoader::Model> model);
+	void renderModels();
+	static void initPickingFramebuffer(int width, int height);
+	auto performPicking(int mouseX, int mouseY) -> int;
+	void clearBuffers();
+	void renderNewFrame();
+	void terminate();
 };

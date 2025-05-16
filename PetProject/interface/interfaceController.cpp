@@ -1,64 +1,70 @@
-#include "interfaceController.h"
+#include "interface/interfaceController.h"
+#include "controls/controller.h"
+#include "shaders/shader.h"
+#include "model/model.h"
+#include "scene/sceneCondition.h"
 
+GUIController::GUIController(
+	std::shared_ptr<Scene> scene,
+	std::shared_ptr<Controller> controller)
+	: 
+	_scene(scene),
+	_controller(controller)
+{}
 
-Controller::Controller(std::shared_ptr<Model> _model, 
-		std::shared_ptr<Shader> _modelShader, 
-		std::shared_ptr<Scene> _scene)
-	: model(_model), 
-	  modelShader(_modelShader), 
-	  scene(_scene),
-	  edgeLimit(0.001f)
-	{
-		 
-	}
-
-void Controller::OpenModel()
+void GUIController::openModel()
 {
-	FileDialog fileDialog;
-	std::filesystem::path modelPath = fileDialog.OpenFile("OBJ files (*.obj)\0*.obj\0"); //filters for .obj only
+	std::filesystem::path modelPath = _fileDialog.openFile("OBJ files (*.obj)\0*.obj\0"); //filters for .obj only
 	if (modelPath != "")
 	{
-		model->loadModel(modelPath);
-		currentModelPath = modelPath;
+		auto model = std::make_shared<AssimpLoader::Model>(modelPath);
+		_scene->addModel(model);
+		_scene->selectedModels.clear();
+		_scene->selectedModels.push_back(model);
 	}
 }
 
-void Controller::SetCurrentModelPath(const std::filesystem::path& file_path)
+void GUIController::setModelColor(float _modelColor[3])
 {
-	currentModelPath = file_path;
+	if (_scene->selectedModels.empty())
+	{
+		return;
+	}
+	for (auto model : _scene->selectedModels)
+	{
+		std::copy(_modelColor, _modelColor + 3, model->modelColor.begin());
+	}
 }
 
-void Controller::SetModelColor(float _modelColor[3])
+void GUIController::setModelSize(float value)
 {
-	std::copy(_modelColor, _modelColor+3, model->modelColor.begin());
+	if (_scene->selectedModels.empty())
+	{
+		return;
+	}
+	for (auto model : _scene->selectedModels)
+	{
+		model->modelSize = value; //TODO here like active model
+	}
 }
 
-void Controller::SetModelSize(float value)
+void GUIController::setVertexLimit(uint32_t targetVertexCount)
 {
-	model->modelSize = value;
+	_vertexLimit = targetVertexCount;
 }
 
-void Controller::SetEdgeLimit(float value)
+void GUIController::setLigthIntencity(float value)
 {
-	edgeLimit = value;
+	std::fill(_scene->lightIntencity.begin(), _scene->lightIntencity.end(), value);
 }
 
-void Controller::SetLigthIntencity(float value)
+void GUIController::setLigthDirection(float lightDir[3]) //TODO std::array
 {
-	std::fill(scene->lightIntencity.begin(), scene->lightIntencity.end(), value);
-}
-
-void Controller::SetLigthDirection(float lightDir[3])
-{
-	std::copy(lightDir, lightDir+3, scene->lightDirection.begin());
+	std::copy(lightDir, lightDir+3, _scene->lightDirection.begin());
 }
 
 
-void Controller::CreateLowPolyVersion()
+void GUIController::createLowPolyVersion()
 {
-	VDPL::GeneratorInterface generator(model->modelPath, edgeLimit);
-	std::cout << "PATH:" << generator.lowpolyFilePath;
-	currentModelPath = generator.lowpolyFilePath;
-	model->loadModel(currentModelPath);
-	//cond.loadModel = false;
+	_controller->simplifySelectedModels(_vertexLimit);
 }

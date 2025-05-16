@@ -20,32 +20,41 @@
 #include <vector>
 #include <filesystem>
 
-unsigned int TextureFromFile(const char* path, const std::filesystem::path& directory, bool gamma = false);
-
-class Model
+namespace AssimpLoader
 {
-public:
 
-	std::vector<Texture> textures_loaded;
-	std::vector<Mesh> meshes;
-	std::filesystem::path modelPath;
-	bool gammaCorrection;
+	unsigned int TextureFromFile(const char* path, const std::filesystem::path& directory, bool gamma = false);
 
-	float modelSize = 1.0f;
-	std::array<float, 4> modelColor = { 0.7f, 1.0f, 0.7f, 1.0f };
+	class Model
+	{
+	public:
 
-	Model() = default;
+		std::vector<Texture> textures_loaded;
+		std::vector<Mesh> meshes;
+		std::filesystem::path modelPath;
+		bool gammaCorrection;
 
-	Model(const std::filesystem::path& path, bool gamma = false);
+		float modelSize = 1.0f;
+		std::array<float, 4> modelColor = { 0.10f, 1.0f, 1.0f, 1.0f };
+		glm::vec3 modelPosition = { 0.0f, 0.0f, 0.0f };
 
-	void Draw(Shader& shader);
+		Model() = default;
 
-	void loadModel(const std::filesystem::path& path);
+		Model(const std::filesystem::path& path, bool gamma = false);
 
-private:
-	void processNode(aiNode* node, const aiScene* scene);
+		Model(const Model& other) = default;
 
-	Mesh processMesh(aiMesh* mesh, const aiScene* scene);
+		void draw(Shader& shader);
 
-	std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
-};
+		void loadModel(const std::filesystem::path& path);
+
+		std::unique_ptr<Model> clone();
+
+	private:
+		void processNode(aiNode* node, const aiScene* scene);
+
+		Mesh processMesh(aiMesh* mesh, const aiScene* scene);
+
+		std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
+	};
+}

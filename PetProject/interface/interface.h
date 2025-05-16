@@ -1,32 +1,28 @@
 #pragma once
 
-#include <algorithm>
-#include <string>
+#include <memory>
 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
-#include "interfaceController.h"
+class GUIController;
+struct GLFWwindow;
 
-class GUI
+class GUI 
 {
 private:
-	std::shared_ptr<Controller> controller;
+	std::shared_ptr<GUIController> controller;
 
-	float modelColor[3]; //rewrite
-	float lightIntencity;
-	float lightDirection[3] = {-0.2f, -1.0f, -0.3f};
-	float modelSize;
-	float edgeLimit;
-
+	float _modelColor[3];
+	float _lightIntencity;
+	float _lightDirection[3] = {-0.2f, -1.0f, -0.3f};
+	float _modelSize = 1.0f;
+	int   _vertexCountLimit = 3;
 
 public:
-    GUI(std::shared_ptr<Controller> _controller);
-	void Initialize(GLFWwindow* window);
-	void SetStyle();
-	void SetNewFrame();
-	void SetWindowPos();
-    void SetMenu();
-	void RenderInterface();
-    void Clean();
+    GUI(std::shared_ptr<GUIController> _controller);
+	void initialize(GLFWwindow* window);
+	void setStyle();
+	void setNewFrame();
+	void setWindowPos();
+    void setMenu();
+	void renderInterface();
+    void clean();
 };

@@ -1,8 +1,10 @@
 #pragma once
 #include <string>
 
-class FileDialog
+class FileDialog final
 {
+private:
+
 public:
-	static std::string OpenFile(const char* filter);
+	static std::string openFile(const char* filter);
 };

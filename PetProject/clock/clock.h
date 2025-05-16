@@ -3,12 +3,12 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-class Clock
+class Clock final
 {
 private:
-	float deltaTime = 0.0f;
-	float lastFrame = 0.0f;
+	float _deltaTime = 0.0f;
+	float _lastFrame = 0.0f;
 public:
-	void UpdateDeltaTime();
-	float GetDeltaTime();
+	void updateDeltaTime();
+	auto getDeltaTime() -> float;
 };

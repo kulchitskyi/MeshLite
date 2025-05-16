@@ -1,13 +1,13 @@
 #include "clock.h"
 
-void Clock::UpdateDeltaTime()
+void Clock::updateDeltaTime()
 {
 	float currentFrame = static_cast<float>(glfwGetTime());
-	deltaTime = currentFrame - lastFrame;
-	lastFrame = currentFrame;
+	_deltaTime = currentFrame - _lastFrame;
+	_lastFrame = currentFrame;
 }
 
-float Clock::GetDeltaTime()
+auto Clock::getDeltaTime() -> float
 {
-	return deltaTime;
+	return _deltaTime;
 }

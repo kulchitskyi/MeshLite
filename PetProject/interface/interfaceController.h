@@ -1,34 +1,29 @@
 #pragma once
+#include "fileDialog/fileDialog.h"
 
 #include <algorithm>
 #include <filesystem>
 
-#include "shaders/shader.h"
-#include "model/model.h"
+class Controller;
+class Scene;
+class Shader;
 
-#include "fileDialog/FileDialog.h"
-
-#include "lowpoly/lowPolyGenerator.h"
-#include "scene/sceneCondition.h"
-
-class Controller
+class GUIController final
 {
 private:
-	std::shared_ptr<Model> model;
-	std::shared_ptr<Shader> modelShader;
-	std::shared_ptr<Scene> scene;
-	std::filesystem::path currentModelPath;
-	float edgeLimit;
+	std::shared_ptr<Controller> _controller;
+	std::shared_ptr<Scene> _scene;
+	FileDialog _fileDialog;
+	uint32_t _vertexLimit = 3;
 public:
-	Controller(std::shared_ptr<Model> _model, 
-		std::shared_ptr<Shader> _modelShader, 
-		std::shared_ptr<Scene> _scene);
-	void OpenModel();
-	void SetCurrentModelPath(const std::filesystem::path& file_path);
-	void SetModelColor(float _modelColor[3]);
-	void SetModelSize(float value);
-	void SetEdgeLimit(float value);
-	void SetLigthIntencity(float value);
-	void SetLigthDirection(float _lightDir[3]);
-	void CreateLowPolyVersion();
+	GUIController(
+		std::shared_ptr<Scene> scene,
+		std::shared_ptr<Controller> controller);
+	void openModel();
+	void setModelColor(float _modelColor[3]);
+	void setModelSize(float value);
+	void setVertexLimit(uint32_t targetVertexCount);
+	void setLigthIntencity(float value);
+	void setLigthDirection(float _lightDir[3]);
+	void createLowPolyVersion();
 };
